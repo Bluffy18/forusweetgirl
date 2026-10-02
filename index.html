@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Surprise 🌷</title>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: "Poppins", Arial, sans-serif;
+    background: linear-gradient(135deg, #ffd6e7, #ffeef5, #ffc1d9);
+}
+/* LOGIN */
+.login-screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ffd1e3, #fff0f6);
+    z-index: 100;
+    transition: opacity 1s ease, visibility 1s ease;
+}
+.login-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+.login-box {
+    width: 90%;
+    max-width: 380px;
+    padding: 40px 30px;
+    text-align: center;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 25px;
+    box-shadow: 0 15px 50px rgba(180,70,120,0.2);
+    backdrop-filter: blur(12px);
+}
+.heart {
+    font-size: 55px;
+    animation: heartbeat 1.5s infinite;
+}
+@keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+.login-box h1 {
+    margin: 15px 0 8px;
+    color: #c2185b;
+}
+.login-box p {
+    color: #8a4964;
+    margin-bottom: 25px;
+}
+input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #f5b4cc;
+    border-radius: 12px;
+    outline: none;
+    text-align: center;
+    font-size: 18px;
+    letter-spacing: 5px;
+    background: white;
+}
+input:focus {
+    border-color: #e91e63;
+}
+button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: #e91e63;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .3s;
+}
+button:hover {
+    transform: scale(1.03);
+    background: #c2185b;
+}
+.error {
+    color: #d32f2f;
+    margin-top: 12px;
+    min-height: 20px;
+}
+/* SURPRISE */
+.surprise {
+    position: fixed;
+    inset: 0;
+    display: none;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #ffe8f1, #ffd0e2);
+}
+.surprise.show {
+    display: block;
+}
+/* Falling petals */
+.petal {
+    position: absolute;
+    top: -30px;
+    width: 12px;
+    height: 18px;
+    background: #ff8fbd;
+    border-radius: 80% 20% 80% 20%;
+    opacity: .75;
+    animation: fall linear forwards;
+}
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(720deg);
+    }
+}
+/* TULIP GARDEN */
+.tulip-garden {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 10px;
+    transition: opacity 2s ease;
+}
+.tulip {
+    position: relative;
+    width: 35px;
+    height: 170px;
+    transform-origin: bottom;
+    animation: grow 1.8s ease-out forwards;
+    opacity: 0;
+}
+@keyframes grow {
+    from {
+        transform: scaleY(0);
+        opacity: 0;
+    }
+    to {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+.stem {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 6px;
+    height: 125px;
+    transform: translateX(-50%);
+    background: #4caf50;
+    border-radius: 10px;
+}
+.leaf {
+    position: absolute;
+    width: 35px;
+    height: 70px;
+    background: #66bb6a;
+    border-radius: 100% 0 100% 0;
+    bottom: 35px;
+}
+.leaf.left {
+    left: -2px;
+    transform: rotate(-35deg);
+}
+.leaf.right {
+    right: -2px;
+    transform: scaleX(-1) rotate(-35deg);
+}
+.flower {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 58px;
+    height: 65px;
+    transform: translateX(-50%);
+    background: #f06292;
+    border-radius: 50% 50% 45% 45%;
+    box-shadow:
+        -17px 5px 0 #ec407a,
+        17px 5px 0 #ec407a,
+        inset 0 -10px 10px rgba(190,0,70,.15);
+}
+.flower::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 10px;
+    width: 38px;
+    height: 35px;
+    background: #f48fb1;
+    border-radius: 50% 50% 0 0;
+}
+/* MESSAGE */
+.message {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    max-width: 600px;
+    transform: translate(-50%, -50%) scale(.7);
+    opacity: 0;
+    text-align: center;
+    padding: 40px 30px;
+    background: rgba(255,255,255,.82);
+    border-radius: 28px;
+    box-shadow: 0 20px 70px rgba(180,50,100,.25);
+    backdrop-filter: blur(12px);
+    transition: 1.5s ease;
+}
+.message.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+.message .big-heart {
+    font-size: 55px;
+    margin-bottom: 10px;
+}
+.message h2 {
+    color: #c2185b;
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+.message p {
+    color: #71384f;
+    font-size: 18px;
+    line-height: 1.8;
+}
+.signature {
+    margin-top: 25px;
+    color: #e91e63;
+    font-weight: bold;
+    font-size: 18px;
+}
+/* Mobile */
+@media (max-width: 500px) {
+    .tulip {
+        width: 25px;
+        height: 140px;
+    }
+    .flower {
+        width: 45px;
+        height: 52px;
+    }
+    .stem {
+        height: 105px;
+    }
+    .leaf {
+        width: 28px;
+        height: 55px;
+    }
+    .message {
+        padding: 30px 22px;
+    }
+    .message h2 {
+        font-size: 25px;
+    }
+    .message p {
+        font-size: 16px;
+    }
+}
+</style>
+</head>
+<body>
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+    <div class="login-box">
+        <div class="heart">💗</div>
+        <h1>A Little Surprise</h1>
+        <p>
+            Someone prepared something special for you.
+            <br>
+            Enter the secret password. 🌷
+        </p>
+        <input
+            type="password"
+            id="password"
+            maxlength="4"
+            placeholder="••••"
+        >
+        <button onclick="unlock()">
+            Open My Surprise 💌
+        </button>
+        <div class="error" id="error"></div>
+    </div>
+</div>
+<!-- SURPRISE -->
+<div class="surprise" id="surprise">
+    <div class="tulip-garden" id="garden"></div>
+    <div class="message" id="message">
+        <div class="big-heart">💗</div>
+        <h2>Hi, you. 🌷</h2>
+        <p>
+            Hi, I hope you're doing well.
+            Take your time to enjoy and don't worry about everything.
+            Live once and always be happy.
+            I am here always for you.
+            Just message me if you feel worried or something is bothering you.
+        </p>
+        <div class="signature">
+            Always here for you. ❤️
+        </div>
+    </div>
+</div>
+<script>
+const CORRECT_PASSWORD = "0000";
+function unlock() {
+    const password = document.getElementById("password").value;
+    const error = document.getElementById("error");
+    if (password !== CORRECT_PASSWORD) {
+        error.textContent = "Wrong password... try again 💗";
+        return;
+    }
+    error.textContent = "";
+    document.getElementById("loginScreen").classList.add("hide");
+    setTimeout(() => {
+        document.getElementById("surprise").classList.add("show");
+        createTulips();
+        createPetals();
+        /*
+         * After the tulips have appeared,
+         * show the romantic message.
+         */
+        setTimeout(() => {
+            document.getElementById("garden").style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById("message").classList.add("show");
+            }, 800);
+        }, 6500);
+    }, 900);
+}
+/* CREATE MANY PINK TULIPS */
+function createTulips() {
+    const garden = document.getElementById("garden");
+    const numberOfTulips =
+        window.innerWidth < 600 ? 24 : 40;
+    for (let i = 0; i < numberOfTulips; i++) {
+        const tulip = document.createElement("div");
+        tulip.className = "tulip";
+        const randomHeight =
+            100 + Math.random() * 120;
+        const randomDelay =
+            Math.random() * 2.5;
+        tulip.style.height = randomHeight + "px";
+        tulip.style.animationDelay = randomDelay + "s";
+        tulip.innerHTML = `
+            <div class="flower"></div>
+            <div class="stem"></div>
+            <div class="leaf left"></div>
+            <div class="leaf right"></div>
+        `;
+        garden.appendChild(tulip);
+    }
+}
+/* FALLING PINK PETALS */
+function createPetals() {
+    for (let i = 0; i < 35; i++) {
+        const petal = document.createElement("div");
+        petal.className = "petal";
+        petal.style.left =
+            Math.random() * 100 + "%";
+        petal.style.animationDuration =
+            (4 + Math.random() * 5) + "s";
+        petal.style.animationDelay =
+            Math.random() * 5 + "s";
+        petal.style.transform =
+            `rotate(${Math.random() * 360}deg)`;
+        document.getElementById("surprise")
+            .appendChild(petal);
+    }
+}
+/* PRESS ENTER TO LOGIN */
+document.getElementById("password")
+.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        unlock();
+    }
+});
+</script>
+</body>
+</html>
